@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Debug Fineprint in Chrome",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run engine tests",
+      "program": "${workspaceFolder}/tests/engine.test.js",
+      "args": [],
+      "console": "integratedTerminal"
+    }
+  ]
+}

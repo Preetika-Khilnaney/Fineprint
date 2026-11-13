@@ -1,0 +1,60 @@
+MASTER VENDOR SERVICES AGREEMENT
+
+This Master Vendor Services Agreement (the "Agreement") is entered into as of March 1, 2026 (the "Effective Date") between Northwind Cloud Systems Pvt. Ltd. ("Vendor") and Brightline Retail Ltd. ("Customer").
+
+1. Definitions
+1.1 "Services" means the cloud hosting, maintenance and support services described in Schedule A.
+1.2 "Customer Data" means all data, including personal data of Customer's shoppers, uploaded by Customer to the Services.
+
+2. Term and Renewal
+2.1 This Agreement commences on the Effective Date and continues for an initial term of two (2) years.
+2.2 This Agreement shall automatically renew for successive one (1) year terms unless Customer provides written notice of non-renewal at least ninety (90) days before the end of the then-current term.
+
+3. Payment Terms
+3.1 Customer shall pay Vendor annual Fees of $240,000, invoiced quarterly in advance.
+3.2 All invoices are payable Net 30 from the invoice date.
+3.3 Late payments shall accrue a late fee of 2% per month on the outstanding balance.
+3.4 Vendor may increase the Fees at any time upon written notice to Customer.
+3.5 Customer shall reimburse reasonable expenses as determined by Vendor from time to time.
+
+4. Services and Service Levels
+4.1 Vendor shall use commercially reasonable efforts to make the Services available.
+4.2 Vendor does not guarantee any specific uptime, response time or resolution time.
+
+5. Confidentiality
+5.1 Each party shall hold the other party's Confidential Information in confidence and shall not disclose it to any third party.
+5.2 The obligations in this Section 5 survive for two (2) years after termination.
+
+6. Intellectual Property
+6.1 All intellectual property rights in the Services, and in any deliverables, improvements, reports or derivative works created under this Agreement, including works derived from Customer Data, shall vest exclusively in Vendor.
+6.2 Customer grants Vendor a perpetual, irrevocable, royalty-free license to use Customer Data for any purpose.
+
+7. Warranties
+7.1 THE SERVICES ARE PROVIDED "AS IS" AND VENDOR DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED.
+
+8. Limitation of Liability
+8.1 In no event shall Vendor be liable for any indirect, incidental, consequential or special damages, or for loss of data or profits.
+8.2 Vendor's total aggregate liability under this Agreement shall not exceed the Fees paid in the one (1) month preceding the claim.
+8.3 Customer shall be liable for any and all damages, losses and costs arising out of or related to this Agreement, without limitation.
+
+9. Indemnification
+9.1 Customer shall indemnify, defend and hold harmless Vendor from any and all claims, losses and expenses arising out of or relating to Customer's use of the Services, regardless of the cause.
+
+10. Termination
+10.1 Vendor may terminate this Agreement at any time, for any reason, upon seven (7) days written notice to Customer.
+10.2 Customer may terminate this Agreement only for material breach by Vendor that remains uncured ninety (90) days after written notice.
+10.3 Upon termination, all Fees for the remainder of the then-current term become immediately due and payable.
+
+11. Non-Solicitation and Non-Compete
+11.1 For a period of three (3) years after termination, Customer shall not engage any provider offering services similar to the Services.
+
+12. Dispute Resolution
+12.1 Any dispute arising under this Agreement shall be finally resolved by binding arbitration seated in Wilmington, Delaware, and Customer waives any right to a jury trial or class action.
+
+13. Governing Law
+13.1 This Agreement is governed by the laws of the State of Delaware.
+
+14. General
+14.1 Vendor may amend the terms of this Agreement at any time by posting the updated terms on its website.
+14.2 Vendor may assign this Agreement without Customer's consent. Customer may not assign this Agreement without Vendor's prior written consent.
+14.3 This Agreement constitutes the entire agreement between the parties and supersedes all prior discussions.

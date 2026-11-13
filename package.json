@@ -1,0 +1,24 @@
+{
+  "name": "fineprint-contract-review",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Autonomous legal contract review: an 11-agent pipeline that parses contracts, detects risk, explains it in plain English and drafts redlines.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/engine.test.js",
+    "review": "node scripts/review-cli.js"
+  },
+  "dependencies": {
+    "mammoth": "1.8.0",
+    "pdfjs-dist": "4.4.168"
+  },
+  "devDependencies": {
+    "vite": "5.4.10"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
