@@ -1,4 +1,4 @@
-// Agent 8 · Plain Language Translator
+// Agent 9 · Plain Language Translator
 import {toPlain} from '../plainLanguage.js';
 
 export const plainLanguageAgent = {

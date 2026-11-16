@@ -1,5 +1,6 @@
-// Agent 9 · Risk Scoring
-// Weighted points per risk → 0–100 score (higher = riskier), dimension levels and a compliance %.
+// Agent 10 · Risk Scoring
+// Weighted points per verified or review-flagged risk → 0–100 score (higher = riskier), dimension levels and a compliance %.
+// Suppressed findings (failed grounding) never reach this agent.
 import {REQUIRED} from '../knowledge/categories.js';
 
 export const WEIGHTS = {high: 14, medium: 6, low: 2};

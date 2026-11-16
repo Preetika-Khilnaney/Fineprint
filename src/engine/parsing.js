@@ -1,6 +1,6 @@
 // Parsing, segmentation, classification and extraction logic used by agents 1–4.
 import {reEsc,days,months,years,money,sentences} from './utils.js';
-import {CATS} from './knowledge/categories.js';
+import {classifyText} from './classifier.js';
 
 export function preprocess(raw){
   let t=raw.replace(/\r/g,'').replace(/ /g,' ').replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/\t/g,' ');
@@ -52,14 +52,8 @@ export function segment(P){
 }
 export function classify(cl,overrides={}){
   cl.forEach(c=>{
-    const t=' '+c.text.toLowerCase()+' ', st=c.secTitle.toLowerCase();
-    const scores=Object.entries(CATS).map(([cat,d])=>{
-      let s=0;d.t.forEach(k=>{if(st.includes(k))s+=3});
-      d.k.forEach(k=>{let n=t.split(k).length-1;s+=Math.min(n,3)*2});
-      return[cat,s];
-    }).sort((a,b)=>b[1]-a[1]);
-    let [cat,sc]=scores[0];if(sc===0)cat='General';
-    c.cat=overrides[c.num]||cat; c.conf=sc?Math.round(100*sc/(sc+(scores[1][1]||0)+1)):30; c.overridden=!!overrides[c.num];
+    const r=classifyText(c.text,c.secTitle);
+    c.cat=overrides[c.num]||r.cat; c.conf=r.conf; c.catSource=overrides[c.num]?'user':r.source; c.overridden=!!overrides[c.num];
   });
 }
 export function findParties(text){

@@ -1,21 +1,28 @@
 {
   "name": "fineprint-contract-review",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Autonomous legal contract review: an 11-agent pipeline that parses contracts, detects risk, explains it in plain English and drafts redlines.",
+  "description": "Legal contract review: a 12-agent pipeline that parses contracts, classifies clauses with a CUAD-trained hybrid model, detects risk, verifies every finding against the contract text and drafts redlines.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "node --test tests/engine.test.js",
-    "review": "node scripts/review-cli.js"
+    "test": "node --test tests/engine.test.js tests/quality.test.js",
+    "review": "node scripts/review-cli.js",
+    "data:cuad": "node scripts/data/download-cuad.js",
+    "data:prepare": "node scripts/data/prepare-cuad.js",
+    "train": "node scripts/ml/train-classifier.js",
+    "train:signals": "node scripts/ml/train-signals.js",
+    "eval": "node scripts/eval/run-eval.js",
+    "reproduce": "npm run data:cuad && npm run data:prepare && npm run train && npm run train:signals && npm run build && npm run eval"
   },
   "dependencies": {
     "mammoth": "1.8.0",
     "pdfjs-dist": "4.4.168"
   },
   "devDependencies": {
+    "adm-zip": "0.5.16",
     "vite": "5.4.10"
   },
   "engines": {

@@ -2,6 +2,7 @@
 import {fmtMoney, REGION} from '../../engine/index.js';
 import {$, esc, badge, cap, maxLvl, ICONS} from '../dom.js';
 import {S} from '../state.js';
+import {drawSprites} from '../pixel.js';
 
 const W = {high: 14, medium: 6, low: 2};
 const lvlColor = l => l === 'high' ? 'var(--hi)' : l === 'medium' ? 'var(--med)' : 'var(--ok)';
@@ -9,19 +10,35 @@ const lvlColor = l => l === 'high' ? 'var(--hi)' : l === 'medium' ? 'var(--med)'
 export function renderOverview() {
   const A = S.A, x = A.ctx, F = A.facts;
   const title = A.title ? A.title.toLowerCase().replace(/(^|\s)\S/g, m => m.toUpperCase()) : A.name;
-  $('#ovMeta').innerHTML = `Welcome to your contract chambers. Now reviewing the <b>${esc(title)}</b> between ${esc(x.parties.map(p => p.legal || p.role).join(' and '))}${F.effective ? ', effective ' + esc(F.effective) : ''}.`;
+  $('#ovMeta').innerHTML = `Now reviewing the <b>${esc(title)}</b> between ${esc(x.parties.map(p => p.legal || p.role).join(' and '))}${F.effective ? ', effective ' + esc(F.effective) : ''}, from the side of <b>${esc(x.us)}</b>.`;
 
   const n = l => A.risks.filter(r => r.level === l).length;
-  $('#hRisk').textContent = `${A.score}/100`;
-  $('#hRiskLvl').textContent = `${A.level} risk`; $('#hRiskLvl').className = 'pixtag ' + A.level;
-  $('#hClauses').textContent = A.clauses.length;
-  $('#hRedlines').textContent = `${A.risks.filter(r => r.fix).length} edits`;
-  $('#hHigh').textContent = `${n('high')} high risks`; $('#hHigh').className = 'pixtag ' + (n('high') ? 'high' : 'low');
-  $('#hCompliance').textContent = `${A.compliance}%`;
+  const au = A.audit, verified = au.verified, total = A.risks.length;
+  // Six identical stat tiles: label + arrow, sprite in a fixed frame, value, caption.
+  const TILES = [
+    {label: 'Risk score', sprite: 'scales', href: '#findingsCard', tint: 1, val: A.score, unit: '/100', cap: `${cap(A.level)} risk`, dot: A.level},
+    {label: 'Clauses', sprite: 'scroll', href: '#clauses', tint: 2, val: A.clauses.length, cap: `${A.clauses.filter(c => c.risks.length).length} flagged`, dot: ''},
+    {label: 'High risks', sprite: 'gavel', href: '#negotiate', tint: 3, val: n('high'), cap: `${n('medium')} medium · ${n('low')} low`, dot: n('high') ? 'high' : 'ok'},
+    {label: 'Redlines', sprite: 'quill', href: '#redline', tint: 4, val: A.risks.filter(r => r.fix).length, cap: 'Suggested edits', dot: ''},
+    {label: 'Compliance', sprite: 'court', href: '#diff', tint: 5, val: A.compliance, unit: '%', cap: `${A.missing.length} clause${A.missing.length === 1 ? '' : 's'} missing`, dot: A.compliance >= 80 ? 'ok' : A.compliance >= 50 ? 'medium' : 'high'},
+    {label: 'Verified', sprite: 'lens', href: '#evaluation', tint: 1, val: verified, unit: `/${total}`, cap: au.review ? `${au.review} need review` : 'All findings grounded', dot: au.review ? 'medium' : 'ok'},
+  ];
+  $('#stats').innerHTML = TILES.map(t => `<a class="stile tint-${t.tint}" href="${t.href}" ${t.href.startsWith('#findings') ? 'data-scroll="findingsCard"' : ''}>
+      <div class="stile-top"><span class="pixlabel">${t.label}</span><span class="go" aria-hidden="true">↗</span></div>
+      <div class="stile-art"><canvas data-sprite="${t.sprite}"></canvas></div>
+      <div class="stile-val">${t.val}${t.unit ? `<small>${t.unit}</small>` : ''}</div>
+      <div class="stile-cap">${t.dot ? `<i class="dot ${t.dot}"></i>` : ''}${esc(t.cap)}</div></a>`).join('');
+  drawSprites($('#stats'));
+
+  $('#trust').innerHTML = au.checks.map(k => {
+    const ok = k.unit ? k.passed >= 80 : k.passed === k.total, warn = !ok && (k.unit ? k.passed >= 60 : k.rate >= 0.5);
+    return `<li><span class="ic ${ok ? '' : warn ? 'warn' : 'bad'}">${ok ? '✓' : '!'}</span><span>${esc(k.name)}</span><span class="v">${k.unit ? k.passed + '%' : k.passed + '/' + k.total}</span></li>`;
+  }).join('') + (au.lowConfidence ? '<li><span class="ic bad">!</span><span><b>Low-confidence review.</b> Check the structure of this document manually.</span><span></span></li>' : '');
+
+  $('#trustFoot').innerHTML = `<b>${verified}</b> of ${total} findings verified · ${au.review} need review · ${au.suppressed.length} suppressed. Every finding links to the exact words in the contract.`;
   const counts0 = {}; A.clauses.forEach(c => (counts0[c.cat] = (counts0[c.cat] || 0) + 1));
-  const POS = [[2, 6, -28], [55, 2, 0], [40, 30, -12], [2, 52, 6], [52, 56, 8], [16, 80, -6], [54, 82, -10]];
-  $('#pills').innerHTML = Object.entries(counts0).sort((a, b) => b[1] - a[1]).slice(0, POS.length)
-    .map(([cat], i) => `<button class="pill-t" data-cat="${esc(cat)}" style="left:${POS[i][0]}%;top:${POS[i][1]}%;transform:rotate(${POS[i][2]}deg)">${esc(cat)}</button>`).join('');
+  $('#pills').innerHTML = Object.entries(counts0).sort((a, b) => b[1] - a[1]).slice(0, 10)
+    .map(([cat, k]) => `<button class="pill-t" data-cat="${esc(cat)}">${esc(cat)}<span class="n">${k}</span></button>`).join('');
 
   const tabs = [['all', 'All', A.risks.length], ['high', 'High', n('high')], ['medium', 'Medium', n('medium')], ['low', 'Low', n('low')]];
   $('#findFilters').innerHTML = tabs.map(([k, l, c]) => `<button class="${S.findFilter === k ? 'on' : ''}" data-ff="${k}">${l} <span class="muted num">${c}</span></button>`).join('');
@@ -69,15 +86,34 @@ export function renderOverview() {
   $('#cbars').innerHTML = cats.map(r => `<button class="cbar" data-cat="${esc(r.cat)}"><span class="l">${esc(r.cat)}</span><span class="track">${r.h ? `<i style="width:${100 * r.h / mx}%;background:var(--hi)"></i>` : ''}${r.m ? `<i style="width:${100 * r.m / mx}%;background:var(--med)"></i>` : ''}${r.l ? `<i style="width:${100 * r.l / mx}%;background:var(--lo)"></i>` : ''}</span><span class="v">${r.t}</span></button>`).join('');
 }
 
+function highlight(text, ev) {
+  if (!ev) return esc(text);
+  const flat = text.replace(/\s+/g, ' '), i = flat.toLowerCase().indexOf(ev.replace(/\s+/g, ' ').toLowerCase());
+  if (i < 0) return esc(flat);
+  return esc(flat.slice(0, i)) + '<mark>' + esc(flat.slice(i, i + ev.replace(/\s+/g, ' ').length)) + '</mark>' + esc(flat.slice(i + ev.replace(/\s+/g, ' ').length));
+}
+
+function checkChips(r) {
+  const v = r.verification || {}, out = [];
+  if (v.grounded !== null && v.grounded !== undefined) out.push([v.grounded, 'Evidence found in text']);
+  if (v.absenceVerified !== null && v.absenceVerified !== undefined) out.push([v.absenceVerified, v.absenceVerified ? 'Absence confirmed' : 'Possible mention found']);
+  if (v.numbers !== null && v.numbers !== undefined) out.push([v.numbers, 'Figures traceable']);
+  if (v.agreement !== null && v.agreement !== undefined) out.push([v.agreement, 'Second detector agrees']);
+  out.push([v.consistent !== false, 'Consistent with extracted facts']);
+  return `<div class="vchecks">${out.map(([ok, t]) => `<span class="${ok ? 'ok' : 'no'}">${t}</span>`).join('')}</div>`;
+}
+
 function findingRow(r) {
   const A = S.A, c = A.clauses.find(q => q.id === r.clauseId), open = S.open.has(r.id);
+  const vb = r.status === 'verified' ? `<span class="vbadge">✓ Verified</span>` : `<span class="vbadge review">Needs review</span>`;
   return `<div class="f-row ${open ? 'open' : ''}">
-    <button class="f-head" data-toggle="${r.id}" aria-expanded="${open}">${badge(r.level)}<span class="f-title">${esc(r.issue)}</span><span class="f-ref">${r.missing ? 'Missing' : 'Clause ' + esc(r.num || '—')} · ${esc(r.cat)}</span>${ICONS.chev}</button>
+    <button class="f-head" data-toggle="${r.id}" aria-expanded="${open}">${badge(r.level)}<span class="f-title">${esc(r.issue)}</span><span class="f-right"><span class="f-ref">${r.missing ? 'Missing' : 'Clause ' + esc(r.num || '—')}</span>${vb}</span>${ICONS.chev}</button>
     ${open ? `<div class="f-body">
-      ${c ? `<div class="quote">${esc(c.text)}</div>` : ''}
+      ${c ? `<div class="quote">${highlight(c.text, r.evidence)}</div>` : ''}
       <div><div class="lbl">Why it matters</div><p>${esc(r.why)}</p></div>
       <div><div class="lbl">Recommendation</div><p>${esc(r.rec)}</p></div>
-      ${r.juris ? `<div><div class="lbl">${REGION[A.juris]}</div><p>${esc(r.juris)}</p></div>` : ''}
+      ${typeof r.juris === 'string' ? `<div><div class="lbl">${REGION[A.juris]}</div><p>${esc(r.juris)}</p></div>` : ''}
+      <div><div class="lbl">Verification · confidence ${Math.round((r.confidence || 0) * 100)}%</div>${checkChips(r)}${(r.verification?.notes || []).length ? `<p class="mt16 small">${esc(r.verification.notes.join(' '))}</p>` : ''}</div>
       ${r.memory ? `<div class="memnote">Seen before in <b>${esc(r.memory.name)}</b>. Outcome: <b>${esc(r.memory.outcome)}</b>${r.memory.note ? ` (${esc(r.memory.note)})` : ''}.</div>` : ''}
       <div class="row" style="gap:16px">${r.fix ? `<button class="btn b-lime sm" data-addrl="${r.id}">Open redline</button>` : ''}${c ? `<button class="link" data-goto="${c.id}">View clause</button>` : ''}<a class="link" href="#negotiate">Negotiation ask</a></div>
     </div>` : ''}

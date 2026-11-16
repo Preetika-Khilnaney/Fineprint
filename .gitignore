@@ -2,3 +2,6 @@ node_modules
 dist
 .DS_Store
 *.log
+# CUAD dataset (download with `npm run data:cuad`)
+data/cuad/raw/
+data/cuad/processed/

@@ -1,5 +1,5 @@
-// Agent 11 · Orchestrator
-// Runs agents 1–10 in order over a shared analysis object, reporting progress after each step.
+// Agent 12 · Orchestrator
+// Runs agents 1–11 in order over a shared analysis object, reporting progress after each step.
 import {documentParsingAgent} from './01-document-parsing.js';
 import {clauseSegmentationAgent} from './02-clause-segmentation.js';
 import {clauseClassificationAgent} from './03-clause-classification.js';
@@ -7,11 +7,12 @@ import {informationExtractionAgent} from './04-information-extraction.js';
 import {templateComparisonAgent} from './05-template-comparison.js';
 import {riskDetectionAgent} from './06-risk-detection.js';
 import {legalReasoningAgent} from './07-legal-reasoning.js';
-import {plainLanguageAgent} from './08-plain-language.js';
-import {riskScoringAgent} from './09-risk-scoring.js';
-import {reportGeneratorAgent} from './10-report-generator.js';
+import {verificationAgent} from './08-verification.js';
+import {plainLanguageAgent} from './09-plain-language.js';
+import {riskScoringAgent} from './10-risk-scoring.js';
+import {reportGeneratorAgent} from './11-report-generator.js';
 
-export const AGENTS = [documentParsingAgent, clauseSegmentationAgent, clauseClassificationAgent, informationExtractionAgent, templateComparisonAgent, riskDetectionAgent, legalReasoningAgent, plainLanguageAgent, riskScoringAgent, reportGeneratorAgent];
+export const AGENTS = [documentParsingAgent, clauseSegmentationAgent, clauseClassificationAgent, informationExtractionAgent, templateComparisonAgent, riskDetectionAgent, legalReasoningAgent, verificationAgent, plainLanguageAgent, riskScoringAgent, reportGeneratorAgent];
 
 export function newAnalysis(raw, opt = {}) {
   return {raw, name: opt.name || 'Untitled contract', juris: opt.juris || 'IN', persp: opt.persp || null, overrides: opt.overrides || {}, at: new Date().toISOString()};

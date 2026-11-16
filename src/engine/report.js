@@ -6,8 +6,9 @@ export function buildMarkdown(A){
   const x=A.ctx,L=[];const hi=A.risks.filter(r=>r.level==='high');
   L.push(`# Contract Review: ${A.title||A.name}`,'',`Reviewed for **${x.us}** · Region: ${REGION[A.juris]} · ${new Date(A.at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}`,'');
   L.push('## Executive summary','',execSummary(A),'',`**Contract risk score: ${A.score}/100 (${A.level})** · Compliance ${A.compliance}%`,'',`- Financial risk: ${A.dims.financial.level}`,`- Legal risk: ${A.dims.legal.level}`,`- Operational risk: ${A.dims.operational.level}`,'');
-  L.push('## Clause breakdown','');const by={};A.clauses.forEach(c=>{(by[c.cat]=by[c.cat]||[]).push(c)});Object.entries(by).forEach(([cat,cs])=>L.push(`- **${cat}**: clauses ${cs.map(c=>c.num).join(', ')}${cs.some(c=>c.risks.length)?` (${cs.reduce((n,c)=>n+c.risks.length,0)} risk)`:''}`));L.push('');
-  L.push('## Risk analysis','');A.risks.forEach(r=>{L.push(`### ${r.level.toUpperCase()} · ${r.issue}${r.num?` (clause ${r.num})`:''}`,'',`**Category:** ${r.cat}`,'',`**Explanation:** ${r.why}`,'',`**Recommendation:** ${r.rec}`,'');if(r.juris)L.push(`**${REGION[A.juris]}:** ${r.juris}`,'')});
+  L.push('## Clause breakdown','');const by={};A.clauses.forEach(c=>{(by[c.cat]=by[c.cat]||[]).push(c)});Object.entries(by).forEach(([cat,cs])=>L.push(`- **${cat}**: clauses ${cs.map(c=>c.num).join(', ')}${cs.some(c=>c.risks.length)?(n=>` (${n} risk${n===1?'':'s'})`)(cs.reduce((n,c)=>n+c.risks.length,0)):''}`));L.push('');
+  L.push('## Risk analysis','');A.risks.forEach(r=>{L.push(`### ${r.level.toUpperCase()} · ${r.issue}${r.num?` (clause ${r.num})`:''}`,'',`**Category:** ${r.cat}`,'',...(r.evidence?[`**Evidence:** "${r.evidence}" · **Status:** ${r.status} (confidence ${Math.round((r.confidence||0)*100)}%)`,'']:[]),`**Explanation:** ${r.why}`,'',`**Recommendation:** ${r.rec}`,'');if(r.juris)L.push(`**${REGION[A.juris]}:** ${r.juris}`,'')});
+  if(A.audit){L.push('## Verification','',`${A.audit.verified} of ${A.risks.length} findings verified, ${A.audit.review} flagged for human review, ${A.audit.suppressed.length} suppressed for failing evidence grounding.`,'');A.audit.checks.forEach(k=>L.push(`- ${k.name}: ${k.unit?k.passed+'%':k.passed+'/'+k.total}`));L.push('');}
   L.push('## Recommendations','');A.risks.filter(r=>r.ask).forEach((r,i)=>L.push(`${i+1}. ${r.ask}`));L.push('');
   L.push('## Plain-language summary','',plainSummary(A),'','---','_Prepared by an automated legal assistant. This is not legal advice._');
   return L.join('\n');
@@ -26,5 +27,6 @@ export function plainSummary(A){const x=A.ctx,F=A.facts,b=[];
   return b.join(' ');
 }
 export function buildJson(A){return{contract:A.title||A.name,reviewedFor:A.ctx.us,counterparty:A.ctx.them,region:REGION[A.juris],score:A.score,level:A.level,compliance:A.compliance,breakdown:Object.fromEntries(Object.entries(A.dims).map(([k,v])=>[k,v.level])),terms:A.facts,
-  risks:A.risks.map(r=>({risk:r.level,issue:r.rule,title:r.issue,clause:r.num,category:r.cat,impact:r.dim+'_exposure',explanation:r.why,recommendation:r.rec,jurisdiction_note:r.juris||undefined})),
+  risks:A.risks.map(r=>({risk:r.level,issue:r.rule,title:r.issue,clause:r.num,category:r.cat,impact:r.dim+'_exposure',explanation:r.why,recommendation:r.rec,jurisdiction_note:typeof r.juris==='string'?r.juris:undefined,evidence:r.evidence,status:r.status,confidence:r.confidence})),
+  verification:A.audit?{verified:A.audit.verified,review:A.audit.review,suppressed:A.audit.suppressed.length,checks:A.audit.checks.map(k=>({check:k.id,passed:k.passed,total:k.total}))}:undefined,
   clauses:A.clauses.map(c=>({number:c.num,section:c.secTitle,category:c.cat,confidence:c.conf,text:c.text,plain:c.plain,fields:c.fields}))}}

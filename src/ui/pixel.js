@@ -10,6 +10,7 @@ const PAL = {
   F: '#fbf8f0', E: '#c9c1ad', N: '#2d2d36',      // feather, nib
   B: '#243457', b: '#5a73a8',                    // ink
   A: '#ece6d8', a: '#b9b09b', c: '#8f8673',      // stone
+  V: '#3f6b4a', v: '#6f9e76',                    // green cloth
 };
 
 function grid(w, h) {
@@ -88,6 +89,42 @@ const SPRITES = {
     s.rect(2, 8, 30, 2, 'A'); s.rect(2, 9, 30, 1, 'a');
     [4, 10, 16, 22, 28].forEach(x => { s.rect(x - 1, 10, 5, 1, 'A'); s.rect(x, 11, 3, 11, 'A'); s.rect(x + 2, 11, 1, 11, 'a'); });
     s.rect(2, 22, 30, 2, 'A'); s.rect(1, 24, 32, 2, 'a'); s.rect(0, 26, 34, 2, 'A'); s.rect(0, 27, 34, 1, 'c');
+    return s.g;
+  },
+  lens() {
+    const s = grid(32, 32);
+    s.disc(12, 12, 10, 'A'); s.disc(12, 12, 7, 'b'); s.disc(10, 10, 3, 'F');
+    s.rect(3, 11, 2, 2, 'a'); s.set(20, 13, 'a');
+    s.line(19, 19, 29, 29, 'W', 3); s.line(21, 19, 30, 28, 'D', 1);
+    s.rect(27, 3, 3, 1, 'G'); s.rect(28, 2, 1, 3, 'G');
+    return s.g;
+  },
+  books() {
+    const s = grid(32, 28);
+    // bottom: green law book
+    s.rect(1, 20, 30, 7, 'V'); s.rect(1, 20, 30, 1, 'v'); s.rect(27, 21, 3, 5, 'P'); s.rect(27, 22, 3, 1, 'Q'); s.rect(27, 24, 3, 1, 'Q');
+    s.rect(6, 22, 2, 3, 'G'); s.rect(18, 22, 2, 3, 'G'); s.rect(10, 23, 6, 1, 'G');
+    // middle: red book, offset
+    s.rect(4, 13, 26, 7, 'R'); s.rect(4, 13, 26, 1, 'r'); s.rect(4, 14, 3, 5, 'P'); s.rect(4, 15, 3, 1, 'Q'); s.rect(4, 17, 3, 1, 'Q');
+    s.rect(11, 15, 2, 3, 'G'); s.rect(23, 15, 2, 3, 'G'); s.rect(15, 16, 6, 1, 'G');
+    // top: blue book
+    s.rect(2, 6, 24, 7, 'B'); s.rect(2, 6, 24, 1, 'b'); s.rect(22, 7, 3, 5, 'P'); s.rect(22, 8, 3, 1, 'Q'); s.rect(22, 10, 3, 1, 'Q');
+    s.rect(6, 8, 2, 3, 'G'); s.rect(16, 8, 2, 3, 'G'); s.rect(10, 9, 4, 1, 'G');
+    // bookmark ribbon
+    s.rect(14, 1, 2, 5, 'R'); s.set(14, 0, 'r');
+    return s.g;
+  },
+  docs() {
+    const s = grid(32, 30);
+    // back page (v1)
+    s.rect(1, 1, 18, 22, 'Q'); s.rect(1, 1, 18, 1, 'P');
+    [[5, 12], [8, 10], [11, 12], [14, 8]].forEach(([y, w]) => s.rect(4, y, w, 1, 'T'));
+    // front page (v2)
+    s.rect(11, 7, 19, 22, 'P'); s.rect(28, 7, 2, 22, 'Q');
+    [[11, 13], [14, 11], [17, 13], [20, 9]].forEach(([y, w]) => s.rect(14, y, w, 1, 'T'));
+    s.rect(14, 17, 13, 1, 'r'); // changed line
+    // green tick badge
+    s.disc(24, 24, 3, 'V'); s.set(22, 24, 'F'); s.set(23, 25, 'F'); s.set(24, 24, 'F'); s.set(25, 23, 'F'); s.set(26, 22, 'F');
     return s.g;
   },
   case() {

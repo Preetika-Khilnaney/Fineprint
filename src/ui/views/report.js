@@ -15,10 +15,12 @@ export function renderReport() {
       <div class="stat"><div class="v">${A.score}<span class="muted" style="font-size:15px"> / 100</span></div><div class="k">Risk score</div></div>
       ${Object.entries(A.dims).map(([k, v]) => `<div class="stat"><div style="padding:6px 0">${badge(v.level)}</div><div class="k">${cap(k)} risk</div></div>`).join('')}
     </div>
+    <h3>Verification</h3><p>${A.audit.verified} of ${A.risks.length} findings were verified against the contract text; ${A.audit.review} are flagged for human review${A.audit.suppressed.length ? ` and ${A.audit.suppressed.length} were suppressed because their evidence could not be found` : ''}.</p>
+    <ul>${A.audit.checks.map(k => `<li>${esc(k.name)}: ${k.unit ? k.passed + '%' : k.passed + ' of ' + k.total}</li>`).join('')}</ul>
     <h3>Clause breakdown</h3>
     <ul>${Object.entries(by).map(([k, cs]) => `<li><b>${esc(k)}</b>: clauses ${cs.map(c => esc(c.num)).join(', ')} ${cs.some(c => c.risks.length) ? badge(maxLvl(cs.flatMap(c => c.risks))) : ''}</li>`).join('')}</ul>
     <h3>Risk analysis</h3>
-    ${A.risks.map(r => `<div class="rk"><div class="row">${badge(r.level)}<b>${esc(r.issue)}</b><span class="muted small">${r.num ? 'Clause ' + esc(r.num) + ' · ' : ''}${esc(r.cat)} · ${r.dim}</span></div><p>${esc(r.why)}</p>${r.juris ? `<p class="small"><b>${REGION[A.juris]}:</b> ${esc(r.juris)}</p>` : ''}</div>`).join('')}
+    ${A.risks.map(r => `<div class="rk"><div class="row">${badge(r.level)}<b>${esc(r.issue)}</b><span class="muted small">${r.num ? 'Clause ' + esc(r.num) + ' · ' : ''}${esc(r.cat)} · ${r.dim}</span></div><p>${esc(r.why)}</p>${r.evidence ? `<p class="small"><b>Evidence:</b> “${esc(r.evidence)}” · ${r.status === 'verified' ? 'verified' : 'needs review'} (${Math.round((r.confidence || 0) * 100)}%)</p>` : ''}${typeof r.juris === 'string' ? `<p class="small"><b>${REGION[A.juris]}:</b> ${esc(r.juris)}</p>` : ''}</div>`).join('')}
     <h3>Recommendations</h3>
     <ol>${A.risks.filter(r => r.rec).map(r => `<li>${esc(r.rec)}</li>`).join('')}</ol>
     <h3>Plain-language summary</h3><p>${esc(plainSummary(A))}</p>

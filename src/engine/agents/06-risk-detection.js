@@ -1,6 +1,7 @@
 // Agent 6 · Risk Detection
 // Runs every rule over every clause, adds missing-clause risks and region-specific checks.
 import {RULES} from '../rules.js';
+import {detectSignals} from '../signals.js';
 
 const ORDER = {high: 0, medium: 1, low: 2};
 
@@ -13,6 +14,7 @@ export const riskDetectionAgent = {
     let k = 0;
     A.clauses.forEach(c => {
       c.risks = [];
+      c.signals = detectSignals(c.text);
       RULES.forEach(rule => {
         let ok = false;
         try { ok = rule.test(c, x, F); } catch { ok = false; }

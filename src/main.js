@@ -16,11 +16,12 @@ import {renderNegotiate, renderEmail} from './ui/views/negotiate.js';
 import {renderVersions} from './ui/views/versions.js';
 import {renderMemory} from './ui/views/memory.js';
 import {renderReport} from './ui/views/report.js';
+import {renderEvaluation, runBenchmark} from './ui/views/evaluation.js';
 
 /* ---------- navigation ---------- */
-const NAV = [['overview', 'Overview', '--c-teal'], ['clauses', 'Clauses', '--c-yellow'], ['diff', 'Clause diff', '--c-pink'], ['redline', 'Redline', '--c-lime'], ['negotiate', 'Negotiate', '--c-orange'], ['versions', 'Versions', '--c-blue'], ['memory', 'Memory', '--c-violet'], ['report', 'Report', '--c-teal']];
+const NAV = [['overview', 'Overview', '--c-teal'], ['clauses', 'Clauses', '--c-yellow'], ['diff', 'Clause diff', '--c-pink'], ['redline', 'Redline', '--c-lime'], ['negotiate', 'Negotiate', '--c-orange'], ['versions', 'Versions', '--c-blue'], ['memory', 'Memory', '--c-violet'], ['evaluation', 'Evaluation', '--c-pink'], ['report', 'Report', '--c-teal']];
 const VIEWS = ['upload', ...NAV.map(v => v[0])];
-const RENDER = {upload: () => {}, overview: renderOverview, clauses: renderClauses, diff: renderDiff, redline: renderRedline, negotiate: renderNegotiate, versions: renderVersions, memory: renderMemory, report: renderReport};
+const RENDER = {upload: () => {}, overview: renderOverview, clauses: renderClauses, diff: renderDiff, redline: renderRedline, negotiate: renderNegotiate, versions: renderVersions, memory: renderMemory, evaluation: renderEvaluation, report: renderReport};
 const current = () => { const v = (location.hash || '#overview').slice(1); return VIEWS.includes(v) ? v : 'overview'; };
 
 function renderNav() {
@@ -90,7 +91,7 @@ document.addEventListener('click', e => {
     setTimeout(() => { renderClauses(); const el = document.getElementById('cl-' + d.goto); if (el) { el.scrollIntoView({behavior: 'smooth', block: 'start'}); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1600); } }, 40);
     return;
   }
-  if (d.scroll) { document.getElementById(d.scroll)?.scrollIntoView({behavior: 'smooth', block: 'start'}); return; }
+  if (d.scroll) { e.preventDefault(); document.getElementById(d.scroll)?.scrollIntoView({behavior: 'smooth', block: 'start'}); return; }
   if (d.cat !== undefined && (t.classList.contains('cbar') || t.classList.contains('pill-t'))) { S.catFilter = d.cat; location.hash = '#clauses'; return; }
   if (d.toggle) { S.open.has(d.toggle) ? S.open.delete(d.toggle) : S.open.add(d.toggle); renderOverview(); return; }
   if (d.ff) { S.findFilter = d.ff; renderOverview(); return; }
@@ -156,6 +157,7 @@ $('#btnCompare').onclick = () => {
   S.V2 = runAll(t, {name: 'v2', juris: S.A.juris, persp: S.A.ctx.us}); renderVersions();
 };
 $('#vfilter').onchange = renderVersions;
+$('#btnBench').onclick = runBenchmark;
 $('#copyMd').onclick = () => copy(S.A.md, 'Report copied as Markdown');
 $('#copyJson').onclick = () => copy(JSON.stringify(S.A.json, null, 2), 'JSON copied');
 window.addEventListener('hashchange', route);

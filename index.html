@@ -25,57 +25,29 @@
 
   <!-- OVERVIEW -->
   <section id="v-overview" class="view" hidden>
-    <div class="hero-grid">
-      <button class="tile t-risk tint-1" data-scroll="findingsCard" aria-label="Jump to findings">
-        <h2 class="tile-title">Risk score</h2>
-        <span class="notch"><span class="arrow">↗</span></span>
-        <canvas data-sprite="scales" class="spr spr-xl"></canvas>
-        <span class="vlabel" id="hRisk">--</span>
-        <span class="pixtag" id="hRiskLvl">--</span>
-      </button>
-      <a class="tile t-clauses tint-2" href="#clauses">
-        <span class="vlabel sm" id="hClauses">--</span>
-        <canvas data-sprite="scroll" class="spr spr-md"></canvas>
-        <h2 class="tile-title bottom">Clauses</h2>
-        <span class="notch"><span class="arrow">↗</span></span>
-      </a>
-      <a class="tile t-redline tint-3" href="#redline">
-        <span class="notch tl"><span class="arrow">↗</span></span>
-        <canvas data-sprite="quill" class="spr spr-md"></canvas>
-        <h2 class="tile-title bottom">Redline</h2>
-        <span class="vlabel sm" id="hRedlines">--</span>
-      </a>
-      <a class="tile t-power tint-4" href="#negotiate">
-        <span class="pixbadge"><canvas data-sprite="case" class="spr spr-xs"></canvas><span>Win back<br>terms</span></span>
-        <span class="notch"><span class="arrow">↗</span></span>
-        <h2 class="tile-title big">Who holds the power?</h2>
-        <canvas data-sprite="gavel" class="spr spr-lg"></canvas>
-        <span class="pixtag" id="hHigh">--</span>
-      </a>
-      <div class="tile t-intro plain-tile">
-        <p class="intro-text" id="ovMeta">Welcome to your contract chambers.</p>
-        <a class="dbl" href="#report" aria-label="Open the report">»</a>
-      </div>
-      <a class="tile t-courttitle plain-tile" href="#diff"><h2 class="tile-title court-name">Compliance</h2><canvas data-sprite="court" class="spr spr-peek"></canvas></a>
-      <a class="tile t-court tint-5" href="#diff">
-        <canvas data-sprite="court" class="spr spr-lg"></canvas>
-        <span class="vlabel" id="hCompliance">--</span>
-        <span class="scrollhint" aria-hidden="true"><span></span></span>
-      </a>
-      <div class="t-head">
+    <div class="hero">
+      <div class="tile plain-tile hero-main">
+        <span class="pixlabel">Contract review · 12 agents</span>
         <h1 class="headline">Read every clause <em>before</em> you sign it</h1>
+        <p class="hero-sub" id="ovMeta"></p>
+        <div class="pills" id="pills"></div>
       </div>
-      <div class="tile t-pills plain-tile"><div class="pills" id="pills"></div></div>
+      <div class="tile tint-5 hero-trust">
+        <div class="stile-top"><div><span class="pixlabel">Agent 8 · Verification</span><h2>Trust &amp; checks</h2></div><a class="go" href="#evaluation" aria-label="How Fineprint is evaluated">↗</a></div>
+        <ul class="checks" id="trust"></ul>
+        <p class="trust-foot" id="trustFoot"></p>
+      </div>
     </div>
+    <div class="tiles" id="stats"></div>
 
     <div class="grid" style="margin-top:14px">
       <section class="card c8" id="findingsCard">
-        <div class="card-h"><div><span class="pixlabel">Agent 6 · 7</span><h2>Findings</h2></div><div class="tabs" id="findFilters"></div></div>
+        <div class="card-h"><div><span class="pixlabel">Agents 6 · 7 · 8</span><h2>Findings</h2></div><div class="tabs" id="findFilters"></div></div>
         <div class="findings" id="findings"></div>
       </section>
       <div class="c4 col">
         <section class="card tint-1">
-          <div class="card-h"><div><span class="pixlabel">Agent 9</span><h2>Risk breakdown</h2></div></div>
+          <div class="card-h"><div><span class="pixlabel">Agent 10</span><h2>Risk breakdown</h2></div></div>
           <div id="dims"></div>
         </section>
         <section class="card">
@@ -101,7 +73,7 @@
 
   <!-- NEW REVIEW -->
   <section id="v-upload" class="view" hidden>
-    <div class="vhero tint-2"><div><span class="pixlabel">Step one</span><h1>New review</h1><p class="sub">Upload or paste a contract. Eleven agents parse it, check every clause and score the risk.</p></div><canvas data-sprite="scroll" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-2"><div><span class="pixlabel">Step one</span><h1>New review</h1><p class="sub">Upload or paste a contract. Twelve agents parse it, check every clause and score the risk.</p></div><canvas data-sprite="scroll" class="spr spr-hero"></canvas></div>
     <div class="grid">
       <div class="card c7">
         <label class="drop" id="drop" for="file">
@@ -124,7 +96,7 @@
         </div>
       </div>
       <div class="card c5 tint-1">
-        <div class="card-h"><div><span class="pixlabel">Agent 11</span><h2>Orchestrator</h2></div><span class="muted small mono" id="pipeTime">Idle</span></div>
+        <div class="card-h"><div><span class="pixlabel">Agent 12</span><h2>Orchestrator</h2></div><span class="muted small mono" id="pipeTime">Idle</span></div>
         <div class="orch"><span>Status</span><span class="mono small" id="orchState">Waiting</span></div>
         <ol class="agents" id="agents"></ol>
       </div>
@@ -133,7 +105,7 @@
 
   <!-- CLAUSES -->
   <section id="v-clauses" class="view" hidden>
-    <div class="vhero tint-2"><div><span class="pixlabel">Agents 2 · 3 · 8</span><h1>Clauses</h1><p class="sub">Every clause with its category, extracted values, risks and a plain-English version.</p></div><canvas data-sprite="scroll" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-2"><div><span class="pixlabel">Agents 2 · 3 · 9</span><h1>Clauses</h1><p class="sub">Every clause with its category, extracted values, risks and a plain-English version.</p></div><canvas data-sprite="scroll" class="spr spr-hero"></canvas></div>
     <div class="toolbar">
       <input type="search" id="q" placeholder="Search clauses" aria-label="Search clauses">
       <select id="rf" aria-label="Risk filter"><option value="all">All risk levels</option><option value="high">High only</option><option value="medium">Medium and above</option><option value="any">Any risk</option><option value="none">No risk</option></select>
@@ -148,7 +120,7 @@
 
   <!-- DIFF -->
   <section id="v-diff" class="view" hidden>
-    <div class="vhero tint-5"><div><span class="pixlabel">Agent 5</span><h1>Clause diff</h1><p class="sub">Standard clause, contract clause and the risk, side by side. Risky wording is marked red, protective wording green.</p></div><canvas data-sprite="court" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-5"><div><span class="pixlabel">Agent 5</span><h1>Clause diff</h1><p class="sub">Standard clause, contract clause and the risk, side by side. Risky wording is marked red, protective wording green.</p></div><canvas data-sprite="scales" class="spr spr-hero"></canvas></div>
     <div class="toolbar"><select id="diffCat" aria-label="Category"></select><button class="btn b-yellow" id="wdToggle">Word diff off</button></div>
     <div class="stack" id="diffList"></div>
   </section>
@@ -184,7 +156,7 @@
 
   <!-- VERSIONS -->
   <section id="v-versions" class="view" hidden>
-    <div class="vhero tint-5"><div><span class="pixlabel">Version comparison</span><h1>Versions</h1><p class="sub">Compare the contract under review with a new draft to see what changed and how the risk moved.</p></div><canvas data-sprite="scroll" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-5"><div><span class="pixlabel">Version comparison</span><h1>Versions</h1><p class="sub">Compare the contract under review with a new draft to see what changed and how the risk moved.</p></div><canvas data-sprite="docs" class="spr spr-hero"></canvas></div>
     <div class="grid">
       <div class="card c5 tint-2">
         <div class="card-h"><h2>Version 2</h2><div class="row"><button class="btn ghost sm" id="loadV2">Load sample v2</button><button class="btn b-orange sm" id="uploadV2">Upload</button><input type="file" id="fileV2" accept=".pdf,.docx,.txt,.md" hidden></div></div>
@@ -200,7 +172,7 @@
 
   <!-- MEMORY -->
   <section id="v-memory" class="view" hidden>
-    <div class="vhero tint-1"><div><span class="pixlabel">Legal memory</span><h1>Memory</h1><p class="sub">Past reviews saved in this browser. Similar clauses and their negotiation outcomes are matched automatically.</p></div><canvas data-sprite="court" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-1"><div><span class="pixlabel">Legal memory</span><h1>Memory</h1><p class="sub">Past reviews saved in this browser. Similar clauses and their negotiation outcomes are matched automatically.</p></div><canvas data-sprite="books" class="spr spr-hero"></canvas></div>
     <div class="grid">
       <div class="card c5"><div class="card-h"><h2>Saved contracts</h2><span class="muted small" id="memCount"></span></div><div id="memList"></div></div>
       <div class="c7 col">
@@ -210,9 +182,53 @@
     </div>
   </section>
 
+  <!-- EVALUATION -->
+  <section id="v-evaluation" class="view" hidden>
+    <div class="vhero tint-5"><div><span class="pixlabel">Performance · CUAD benchmark</span><h1>Evaluation</h1><p class="sub" id="evSub"></p></div><canvas data-sprite="lens" class="spr spr-hero"></canvas></div>
+    <div class="tiles tiles-ev" id="evKpis"></div>
+    <div class="grid">
+      <section class="card c7">
+        <div class="card-h"><div><span class="pixlabel">Agent 3 · held-out test</span><h2>Clause classification</h2></div></div>
+        <div class="tablewrap"><table class="tbl" id="evAblation"></table></div>
+        <p class="muted small mt16" id="evMcnemar"></p>
+        <h3 class="mt20">Per-class F1 (hybrid)</h3>
+        <div id="evPerClass" class="mt16"></div>
+      </section>
+      <section class="card c5 tint-1">
+        <div class="card-h"><div><span class="pixlabel">Rows = gold · columns = predicted</span><h2>Confusion matrix</h2></div></div>
+        <div id="evConfusion"></div>
+      </section>
+      <section class="card c7">
+        <div class="card-h"><div><span class="pixlabel">Agent 6 · contract level</span><h2>Risk-signal detection</h2></div></div>
+        <div class="tablewrap"><table class="tbl" id="evSignals"></table></div>
+      </section>
+      <section class="card c5 tint-4">
+        <div class="card-h"><div><span class="pixlabel">Agent 8 · injected faults</span><h2>Hallucination tests</h2></div></div>
+        <div class="tablewrap"><table class="tbl" id="evMutation"></table></div>
+        <h3 class="mt20">Checks on real findings</h3>
+        <ul class="checks mt16" id="evProd"></ul>
+      </section>
+      <section class="card c7">
+        <div class="card-h"><div><span class="pixlabel">102 test contracts · full pipeline</span><h2>Latency and scaling</h2></div><button class="btn b-blue sm" id="btnBench">Run live benchmark</button></div>
+        <div id="evScatter"></div>
+        <div class="tablewrap mt16"><table class="tbl" id="evLatency"></table></div>
+      </section>
+      <section class="card c5 tint-2">
+        <div class="card-h"><div><span class="pixlabel">Macro-F1 under perturbation</span><h2>Robustness</h2></div></div>
+        <div class="tablewrap"><table class="tbl" id="evRobust"></table></div>
+        <h3 class="mt20">Reliability</h3>
+        <ul class="plainlist mt16" id="evReliab"></ul>
+      </section>
+      <section class="card c12">
+        <div class="card-h"><div><span class="pixlabel">Training and validation data</span><h2>Dataset and protocol</h2></div></div>
+        <div id="evDataset"></div>
+      </section>
+    </div>
+  </section>
+
   <!-- REPORT -->
   <section id="v-report" class="view" hidden>
-    <div class="vhero tint-3"><div><span class="pixlabel">Agent 10</span><h1>Report</h1><p class="sub">The structured review, ready to share with your team or counsel.</p></div><canvas data-sprite="gavel" class="spr spr-hero"></canvas></div>
+    <div class="vhero tint-3"><div><span class="pixlabel">Agent 11</span><h1>Report</h1><p class="sub">The structured review, ready to share with your team or counsel.</p></div><canvas data-sprite="gavel" class="spr spr-hero"></canvas></div>
     <div class="toolbar"><button class="btn b-violet" id="copyMd">Copy as Markdown</button><button class="btn ghost" id="copyJson">Copy JSON</button></div>
     <article class="card report" id="report"></article>
   </section>
